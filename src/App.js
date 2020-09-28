@@ -24,8 +24,8 @@ class App extends React.Component {
 			<div className="App">
 			<header>
 				<h1>Mama i Naomi</h1>
+				<AmplifySignOut />
 			</header>
-			<AmplifySignOut />
 			<p className="App-intro">{this.state.apiResponse}</p>
 			<Fragment>
 				<h3 style={{ textAlign: 'center' }}>Dos Paint</h3>
@@ -42,4 +42,4 @@ class App extends React.Component {
 	}
 }
 
-export default App;
+export default withAuthenticator(App);
