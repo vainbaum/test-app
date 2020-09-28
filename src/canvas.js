@@ -138,6 +138,9 @@ class Canvas extends Component {
 				onMouseUp={this.endPaintEvent}
 				onMouseMove={this.onMouseMove}
 				onContextMenu={this.onContextMenu}
+				onTouchStart={this.onMouseDown}
+				onTouchCancel={this.endPaintEvent}
+				onTouchMove={this.onMouseMove}
 				/>
 				<button onClick={this.clear} className='clear-button'>Clear</button>
 			</div>
