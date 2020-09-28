@@ -23,7 +23,7 @@ class App extends React.Component {
 		return (
 			<div className="App">
 			<header>
-				<h1>We now have Auth!</h1>
+				<h1>Mama i Naomi</h1>
 			</header>
 			<AmplifySignOut />
 			<p className="App-intro">{this.state.apiResponse}</p>
