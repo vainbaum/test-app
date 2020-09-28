@@ -1,6 +1,6 @@
 {
   "auth": {
-    "clientd972db12": {
+    "clientcb188d34": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
