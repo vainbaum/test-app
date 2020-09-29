@@ -6,6 +6,8 @@ class Canvas extends Component {
 		super(props);
 		this.onMouseDown = this.onMouseDown.bind(this);
 		this.onMouseMove = this.onMouseMove.bind(this);
+		this.onTouchStart = this.onTouchStart.bind(this);
+		this.onTouchMove = this.onTouchMove.bind(this);
 		this.endPaintEvent = this.endPaintEvent.bind(this);
 		this.onContextMenu = this.onContextMenu.bind(this);
 		this.clear = this.clear.bind(this);
@@ -58,6 +60,32 @@ class Canvas extends Component {
 			this.undo(this.line[lastLineIndex]['stop'], this.line[lastLineIndex]['start'], this.backgroundStyle);
 		}
 		this.ctx.lineWidth = 5.1;
+	}
+
+	onTouchStart ({ nativeEvent }) {
+		var bcr = nativeEvent.target.getBoundingClientRect();
+		const offsetX = nativeEvent.targetTouches[0].clientX - bcr.x;
+		const offsetY = nativeEvent.targetTouches[0].clientY - bcr.y;
+		this.isPainting = true;
+		this.history.push(this.line.length);
+		this.prevPos = { offsetX, offsetY };
+	}
+
+	onTouchMove ({ nativeEvent }) {
+		if (this.isPainting) {
+			var bcr = nativeEvent.target.getBoundingClientRect();
+			const offsetX = nativeEvent.targetTouches[0].clientX - bcr.x;
+			const offsetY = nativeEvent.targetTouches[0].clientY - bcr.y;
+			const offSetData = { offsetX, offsetY };
+			//Set the start and stop position of the paint event.
+				const positionData = {
+					start: { ...this.prevPos },
+					stop: { ...offSetData },
+				};
+			//Add the position to the line array
+			this.line = this.line.concat(positionData);
+			this.paint(this.prevPos, offSetData, this.userStrokeStyle);
+		}
 	}
 	endPaintEvent() {
 		if (this.isPainting) {
@@ -129,18 +157,18 @@ class Canvas extends Component {
 	render() {
 		return (
 			<div style={{position:'relative'}}>
-				<canvas style={{right: 0}}
+				<canvas style={{right: 0}} className='paint-window'
 				//We use the ref attribute to get direct access to the canvas element. 
 				ref={(ref) => (this.canvas = ref)}
-				style={{ background: 'black' }}
+				style={{ background: 'black'}}
 				onMouseDown={this.onMouseDown}
 				onMouseLeave={this.endPaintEvent}
 				onMouseUp={this.endPaintEvent}
 				onMouseMove={this.onMouseMove}
 				onContextMenu={this.onContextMenu}
-				onTouchStart={this.onMouseDown}
+				onTouchStart={this.onTouchStart}
 				onTouchCancel={this.endPaintEvent}
-				onTouchMove={this.onMouseMove}
+				onTouchMove={this.onTouchMove}
 				/>
 				<button onClick={this.clear} className='clear-button'>Clear</button>
 			</div>
